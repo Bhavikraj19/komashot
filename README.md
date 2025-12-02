@@ -121,6 +121,75 @@ Select initialJob = SampleMavenProject_build
 step 3 CLICK ON APPLY AND OK
 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BUILDING THE CI/CD  FREESTYLE PIPELINE USING JENKINS FOR MAVEN WEB PROJECT 
+
+step 1 open jenkins 
+step 2 open new item on the left side
+step 3 Enter an item name : SampleMavenWebProject_build
+step 4 click on freestyle project
+step 5 click on ok
+step 6 Source code management 
+Click on git (Give the repository URL For it from github)
+Credentials none or u can give for it 
+step 7 Branches to build ( */main)
+step build triggers (Poll SCM)
+(schedule * * * * *)
+step 8  Build steps ( Invoke top-level Maven Targets)
+(maven version = MAven_Home)
+(Goals = clean)
+AGAIN CLICK ON ADD BUILD STEP ( Invoke top-level Maven Targets)
+(maven version = MAven_Home)
+(Goals = install)
+step 9 Post build actions ( Archive the artifacts)
+(Files to archive = **/*)
+ADD POST BUILD ACTION (build other projects)
+(Projects to build = SampleMavenWebProject_test)
 
 
 
+step 1ENter an item name = SampleMavenWebProject_test
+step 2 click on Freestyle project 
+step 3 click on OK
+step 4 Build Environment (Delete workspace before build starts)
+step 5 Click on Build Steps under that Add build step
+(copy artifacts from another project)
+(project name = SampleMavenWebProject_build)
+(Which build = Click on stable Build)
+(Artifacts to copy = **/*)
+Step 6 Click on add Build step (invoke top-level Maven Targets)
+(maven version = MAVEN_HOME)
+(Goals = test)
+step 7 POST BUILD ACTION ( Archive the artifacts)
+(Files to archive = **/*)
+Click on add post build action ( Build other projects)
+(Projects to build = SampleMavenWebProject_deploy)
+step 8 click on apply nd save 
+
+
+
+step 1ENter an item name = SampleMavenWebProject_deploy
+step 2 click on Freestyle project 
+step 3 click on OK
+step 4 Build Environment (Delete workspace before build starts)
+step 5 Click on Build Steps under that Add build step
+(copy artifacts from another project)
+(project name = SampleMavenWebProject_test)
+(Which build = Click on stable Build)
+(Artifacts to copy = **/*)
+Step 6 Click on add Build step (deploy war/ear to a container)
+(WAR/EAR files = **/*.war)
+(context path = samplewebprojectmaven)
+Step 7 add container Tomcat 9
+Credentials add open the eclippse then on tomcat you will be finding the admin adn password 
+enter that username and password in that
+give tomcat url (Localhost tomcat 8083)
+Step 8 CLICK ON APPLLY AND SAVE
+
+
+Click on the + button there 
+New View Name = SamplewebProject_pipeline
+TYpe = Build Pipeline view
+PIPEline flow = Samplemavenwebproject_build
+click on apply and ok
